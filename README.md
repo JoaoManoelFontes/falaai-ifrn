@@ -23,4 +23,19 @@
 - Docker e Docker Compose
 - Postgres
 - Django
+- Ruf Formatter
 - Tailwind
+
+### Recomended VSCode Extensions
+- **Ruff** - Linting e formatação
+- **Python** - Suporte básico ao Python
+- **Pylance** - IntelliSense avançado
+- **Django** - Suporte ao framework Django
+- **Jinja** - Suporte a templates
+
+### Lint commands
+O `settings.json` do projeto já configura o linting e formating do Ruff por padrão.
+
+- `Ctrl+Shift+P` > "Ruff: Fix all auto-fixable problems"
+- `Ctrl+Shift+P` > "Format Document" (para formatar o arquivo atual)
+- O código será formatado automaticamente ao salvar
