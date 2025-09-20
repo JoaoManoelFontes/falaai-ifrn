@@ -48,3 +48,12 @@ O `settings.json` do projeto já configura o linting e formating do Ruff por pad
 - Rode `npm install` para instalar as dependencias do tailwind com o node
 - Rode `npm run dev` para realizar o build do tailwind nos arquivos estáticos e usá-los no sistema
 - Em produção, rode `npm run build` para fazer o build sem hot reload do tailwind
+
+
+### Run project
+- Copie as variáveis de ambiente que estão em `.env.example` para um arquivo `.env` e modifique conforme necessário
+- Rode `docker-compose up -d` para iniciar o banco
+- Rode `npm run dev` em um terminal separado para realizar o build do tailwind nos arquivos estáticos e usá-los no sistema
+- Rode `python manage.py migrate` se preciso para atualizar o banco
+- Rode `python manage.py runserver` para iniciar o servidor
+- Acesse o site em http://localhost:8000
