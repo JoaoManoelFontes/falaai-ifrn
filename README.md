@@ -10,11 +10,14 @@
 
 
 ### Authors
-- [João Manoel Fontes](https://github.com/JoaoManoelFontes)
+- [João Manoel](https://github.com/JoaoManoelFontes)
+- [Rangel Alves](https://github.com/alvesrangellws)
+- [Gabriel Enzo](https://github.com/GabrielEnzoVidaldeAlmeida)
 
 ### Links
 - [Documento de requisitos](https://docs.google.com/document/d/1kUMdEQq1YbdbOy7oYL5Tuzy3-a1d2wKjgbikccEweNM/edit?tab=t.0)
 - [Protótipo Figma](https://www.figma.com/design/wPmHzmHzOV7PLDN9mbkKWJ/PI---FalaAi?node-id=0-1&p=f&t=sL055wXmvqTFE9CW-0)
+- [Design Sistem Excalidraw](https://excalidraw.com/#room=68512b34a237307a7263,y6DvKL7TMZjF9vpuOX3iGg)
 
 
 ### Stack
@@ -25,6 +28,7 @@
 - Django
 - Ruf Formatter
 - Tailwind
+- Node (>=22.14)
 
 ### Recomended VSCode Extensions
 - **Ruff** - Linting e formatação
@@ -39,3 +43,8 @@ O `settings.json` do projeto já configura o linting e formating do Ruff por pad
 - `Ctrl+Shift+P` > "Ruff: Fix all auto-fixable problems"
 - `Ctrl+Shift+P` > "Format Document" (para formatar o arquivo atual)
 - O código será formatado automaticamente ao salvar
+
+### Tailwind css build
+- Rode `npm install` para instalar as dependencias do tailwind com o node
+- Rode `npm run dev` para realizar o build do tailwind nos arquivos estáticos e usá-los no sistema
+- Em produção, rode `npm run build` para fazer o build sem hot reload do tailwind
