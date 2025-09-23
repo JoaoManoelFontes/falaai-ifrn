@@ -12,12 +12,12 @@
 ### Authors
 - [João Manoel](https://github.com/JoaoManoelFontes)
 - [Rangel Alves](https://github.com/alvesrangellws)
-- [Gabriel Enzo](https://github.com/GabrielEnzoVidaldeAlmeida)
+- [Gabriel Enzo](https://github.com/genzo-dev)
 
 ### Links
 - [Documento de requisitos](https://docs.google.com/document/d/1kUMdEQq1YbdbOy7oYL5Tuzy3-a1d2wKjgbikccEweNM/edit?tab=t.0)
 - [Protótipo Figma](https://www.figma.com/design/wPmHzmHzOV7PLDN9mbkKWJ/PI---FalaAi?node-id=0-1&p=f&t=sL055wXmvqTFE9CW-0)
-- [Design Sistem Excalidraw](https://excalidraw.com/#room=68512b34a237307a7263,y6DvKL7TMZjF9vpuOX3iGg)
+- [User Flows Excalidraw](https://excalidraw.com/#room=68512b34a237307a7263,y6DvKL7TMZjF9vpuOX3iGg)
 - [DER DBDiagram](https://dbdiagram.io/d/FalaAi-IFRN-68cffefc960f6d821a165c13)
 
 
