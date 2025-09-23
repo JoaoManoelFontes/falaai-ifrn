@@ -12,7 +12,7 @@
 ### Authors
 - [João Manoel](https://github.com/JoaoManoelFontes)
 - [Rangel Alves](https://github.com/alvesrangellws)
-- [Gabriel Enzo](https://github.com/GabrielEnzoVidaldeAlmeida)
+- [Gabriel Enzo](https://github.com/genzo-dev)
 
 ### Links
 - [Documento de requisitos](https://docs.google.com/document/d/1kUMdEQq1YbdbOy7oYL5Tuzy3-a1d2wKjgbikccEweNM/edit?tab=t.0)
