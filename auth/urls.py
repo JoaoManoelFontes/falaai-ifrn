@@ -1,11 +1,11 @@
 from django.urls import path
 
-from auth.views import auth_form_view
+from auth.views import auth
 
 urlpatterns = [
     path(
         "",
-        auth_form_view,
+        auth,
         name="auth",
     ),
 ]

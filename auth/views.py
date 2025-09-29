@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.shortcuts import render
 
-from auth.clients.suap import SuapAPIError, SuapAuthError, SuapClient
+from auth.clients.suap import SuapClient
+from auth.exceptions import SuapAPIError, SuapAuthError
 
 
-def auth_form_view(request):
+def auth(request):
+    """View para autenticação e cadastro de usuários via SUAP."""
     if request.method == "POST":
         suap_client = SuapClient()
 
