@@ -8,13 +8,12 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "user",
-        "matricula",
-        "cpf",
-        "role",
-        "phone_number",
+        "isStaff",
+        "course",
+        "profile_img_url",
         "created_at",
     )
-    list_filter = ("role", "created_at")
+    list_filter = ("created_at",)
     search_fields = (
         "matricula",
         "cpf",

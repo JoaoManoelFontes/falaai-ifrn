@@ -1,5 +1,6 @@
 import requests
 
+from auth.clients.suapUserDTO import SuapUserDTO
 from auth.exceptions import SuapAPIError, SuapAuthError
 
 
@@ -60,3 +61,32 @@ class SuapClient:
 
         self.token = response.json().get("access")
         return self.token
+
+    def get_user_data(self) -> SuapUserDTO:
+        """
+        Obtém os dados do usuário autenticado.
+
+        Returns:
+            suapUserDTO: DTO com os dados do usuário autenticado.
+
+        Raises:
+            SuapAuthError: Quando as credenciais são inválidas (401)
+            SuapAPIError: Quando há problemas de conexão ou outros erros da API
+        """
+        url = f"{self.BASE_URL}/rh/meus-dados/"
+
+        try:
+            response = requests.get(
+                url,
+                headers={"Authorization": f"Bearer {self.token}"},
+                timeout=10,
+            )
+            if response.status_code == 401:
+                raise SuapAuthError("Matrícula ou senha inválidos.")
+
+            response.raise_for_status()
+
+            return SuapUserDTO.from_json(response.json())
+
+        except requests.exceptions.RequestException as e:
+            raise SuapAPIError(f"Erro de conexão com o SUAP: {e}")
