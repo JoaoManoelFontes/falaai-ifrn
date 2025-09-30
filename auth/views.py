@@ -1,10 +1,16 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
 
-from auth.clients.suap import SuapAPIError, SuapAuthError, SuapClient
+from auth.clients.suap import SuapClient
+from auth.clients.suapUserDTO import SuapUserDTO
+from auth.exceptions import SuapAPIError, SuapAuthError
+from auth.models import Customer
 
 
-def auth_form_view(request):
+def auth(request):
+    """View para autenticação e cadastro de usuários via SUAP."""
     if request.method == "POST":
         suap_client = SuapClient()
 
@@ -12,14 +18,51 @@ def auth_form_view(request):
         senha = request.POST.get("senha")
 
         try:
-            token = suap_client.authenticate(matricula, senha)
-            print("Token:", token)
-            messages.success(request, "Login realizado com sucesso!")
+            suap_client.authenticate(matricula, senha)
 
-            return render(request, "index.html")
+            suap_user = suap_client.get_user_data()
+            suap_user.password = senha
+
+            customer = get_or_register_customer(suap_user)
+            login(request, customer.user)
+
+            messages.success(request, "Login realizado com sucesso!")
+            return redirect("index")
         except SuapAuthError:
             messages.error(request, "Matrícula ou senha incorretos.")
         except SuapAPIError as e:
             messages.error(request, f"Ocorreu um erro ao conectar ao SUAP: {e}")
 
     return render(request, "auth/form.html")
+
+
+def get_or_register_customer(suapUserDTO: SuapUserDTO) -> Customer:
+    """
+    Obtém ou registra um cliente com base nos dados do usuário SUAP.
+
+    Args:
+        suapUserDTO (SuapUserDTO): DTO com os dados do usuário SUAP.
+
+    Returns:
+        Customer: Cliente registrado ou existente.
+    """
+    existent_customer = Customer.objects.filter(
+        user__username=suapUserDTO.registry
+    ).first()
+
+    if existent_customer:
+        return existent_customer
+
+    user = User.objects.create_user(
+        username=suapUserDTO.registry,
+        first_name=suapUserDTO.name,
+        password=suapUserDTO.password,
+        email=suapUserDTO.email,
+    )
+
+    return Customer.objects.create(
+        user=user,
+        isStaff=suapUserDTO.role == SuapUserDTO.Role.STAFF,
+        profile_img_url=suapUserDTO.profile_img_url,
+        course=suapUserDTO.course,
+    )
