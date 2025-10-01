@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
@@ -66,3 +66,10 @@ def get_or_register_customer(suapUserDTO: SuapUserDTO) -> Customer:
         profile_img_url=suapUserDTO.profile_img_url,
         course=suapUserDTO.course,
     )
+
+
+def logout_view(request):
+    """Desloga o usuário e redireciona para a página de login."""
+    logout(request)
+    messages.success(request, "Você saiu da sua conta.")
+    return redirect("auth")
