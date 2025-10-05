@@ -3,5 +3,6 @@ from django.shortcuts import render
 
 
 @login_required(login_url="auth")
-def index_view(request):
+def index(request):
+    """Página inicial das sugestões."""
     return render(request, "index.html")
