@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FalaAI - IFRN</title>
+    <meta name="description" content="Plataforma de IA para o IFRN">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/input.css' %}">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        {% if messages %}
+        <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
+            {% for message in messages %}
+            <div class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
+                        {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-900{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-900{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-900{% else %}bg-slate-50 border-slate-200 text-slate-900{% endif %}"
+                 role="status" data-toast>
+                <div class="mt-0.5">
+                    {% if 'success' in message.tags %}
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                    {% elif 'error' in message.tags %}
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                    {% elif 'warning' in message.tags %}
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                    {% else %}
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                    {% endif %}
+                </div>
+                <div class="flex-1 text-sm leading-5">{{ message }}</div>
+                <button type="button" class="ml-2 text-slate-500 hover:text-slate-700" aria-label="Fechar" data-toast-close>
+                    ✕
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-12">
+            <h1 class="text-4xl font-bold text-gray-800">
+                Fala aí, IFRN
+            </h1>
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="inline-flex items-center px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    Sair
+                </button>
+            </form>
+            {% endif %}
+        </header>
+        <main class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+                    Bem-vindo ao Fala aí
+                </h2>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-8 border-t border-gray-200">
+            <p class="text-gray-600">
+                © 2024 Fala aí, IFRN. Todos os direitos reservados.
+            </p>
+        </footer>
+    </div>
+</body>
+<script>
+    (function () {
+        const toasts = document.querySelectorAll('[data-toast]');
+        toasts.forEach((toast) => {
+            const timer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-2', 'transition');
+                setTimeout(() => toast.remove(), 200);
+            }, 4000);
+            const btn = toast.querySelector('[data-toast-close]');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    clearTimeout(timer);
+                    toast.classList.add('opacity-0', 'translate-x-2', 'transition');
+                    setTimeout(() => toast.remove(), 150);
+                });
+            }
+        });
+    })();
+</script>
+</html>

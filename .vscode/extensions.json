@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "batisteo.vscode-django",
+        "wholroyd.jinja",
+        "bradlc.vscode-tailwindcss"
+    ]
+}
