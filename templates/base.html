@@ -1,5 +1,3 @@
-{% extends 'base.html' %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'dist/input.css' %}">
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto">
         {% if messages %}
         <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
             {% for message in messages %}
@@ -38,31 +36,58 @@
         </div>
         {% endif %}
         <!-- Header -->
-        <header class="flex items-center justify-between mb-12">
-            <h1 class="text-4xl font-bold text-gray-800">
-                Fala aí, IFRN
-            </h1>
-            <!-- {% if request.user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="inline-flex items-center px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                    Sair
-                </button>
-            </form>
-            {% endif %} -->
+        <header>
+            <nav class="flex justify-between items-center w-full border-b-4 border-gray-300 px-12 py-4">
+                <div>
+                    <span class="text-3xl font-bold">Fala Aí, <span class="text-green-700">IFRN</span></span>
+                </div>
+
+                <div>
+                    <!-- TODO: adicionar method e action de busca -->
+                    <form>
+                    <!-- iconBussola - vai ser o botão --> 
+                     <input type="text" placeholder="Buscar ideias e projetos..." class="px-4 py-2 rounded-md outline-none border border-gray-300 focus:border-green-500 transition">
+                     </form>
+                </div>
+
+                <div>
+                    {% if request.user.is_authenticated %}
+                    <div class="flex gap-4">
+                        <!-- TODO: link para criar nova ideia/projeto -->
+                        <a href="#" class="flex items-center justify-center gap-2 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold px-4 py-2 rounded-md hover:brightness-90 hover:cursor-pointer transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            Nova ideia
+                        </a>
+
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="inline-flex items-center font-bold px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 hover:brightness-90 transition">
+                                Sair
+                            </button>
+                        </form>
+                    </div>
+                    {% else %}
+                        <a href="{% url 'auth' %}" class="flex gap-2 font-semibold border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-200 transition"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                            </svg> 
+                            Entrar
+                        </a>
+                    {% endif %}
+                </div>
+            </nav>
         </header>
-        {% block main %}
-            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-                    Bem-vindo ao Fala aí
-                </h2>
+        <main class="max-w-4xl mx-auto">
+
+        {% block content %}
+
         {% endblock %}
 
         <!-- Footer -->
         <footer class="text-center mt-12 py-8 border-t border-gray-200">
-            <p class="text-gray-600">
-                © 2024 Fala aí, IFRN. Todos os direitos reservados.
-            </p>
+            <Footer>
         </footer>
     </div>
 </body>
