@@ -18,3 +18,6 @@ class Customer(models.Model):
         verbose_name = "Cliente"
         verbose_name_plural = "Clientes"
         ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.user.username
