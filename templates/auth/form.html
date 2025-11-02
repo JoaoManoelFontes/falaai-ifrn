@@ -6,7 +6,7 @@
             {% for message in messages %}
             <div class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
                         {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-900{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-900{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-900{% else %}bg-slate-50 border-slate-200 text-slate-900{% endif %}"
-                 role="status" data-toast>
+                role="status" data-toast>
                 <div class="mt-0.5">
                     {% if 'success' in message.tags %}
                         <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
