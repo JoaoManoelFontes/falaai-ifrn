@@ -20,4 +20,4 @@ class Customer(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name

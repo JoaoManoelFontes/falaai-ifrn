@@ -3,12 +3,31 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from suggestions.forms import SuggestionForm
+from suggestions.models import Suggestion
 
 
 @login_required(login_url="auth")
 def index(request):
     """Página inicial das sugestões."""
-    return render(request, "index.html")
+    suggestions = (
+        Suggestion.objects.all()
+        .only(
+            "id",
+            "title",
+            "status",
+            "description",
+            "votes_count",
+            "comments_count",
+            "created_at",
+            "category__name",
+            "customer__user__first_name",
+        )
+        .select_related("category", "customer", "customer__user")
+        .order_by("-created_at")
+        .exclude(status=Suggestion.Status.IMPLEMENTED)
+    )
+
+    return render(request, "index.html", {"suggestions": suggestions})
 
 
 def create_suggestion(request):
