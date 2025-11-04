@@ -71,17 +71,16 @@
 
 <!-- Ideias da Comunidade -->
 <section class="py-12 bg-gray-50">
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="mx-10 px-6">
     <h2 class="text-3xl font-bold">Ideias da <span class="text-green-600">Comunidade</span></h2>
     <p class="text-gray-600 mb-6">Descubra, vote e participe das melhores propostas</p>
 <!-- Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="border rounded-lg p-6 bg-white">Sistema de Bicicletas</div>
-        <div class="border rounded-lg p-6 bg-white">Maker Space 24h</div>
-        <div class="border rounded-lg p-6 bg-white">Cardápio Digital do RU</div>
-        <div class="border rounded-lg p-6 bg-white">Horta Comunitária</div>
-        <div class="border rounded-lg p-6 bg-white">Salas de Estudo com Reserva</div>
-        <div class="border rounded-lg p-6 bg-white">Festival de Inovação</div>
+        {% for suggestion in suggestions %}
+            {% include 'snippets/suggestion_card.html' with suggestion=suggestion %}
+        {% empty %}
+            <p class="text-gray-600">Nenhuma sugestão encontrada.</p>
+        {% endfor %}
     </div>
     </div>
 </section>

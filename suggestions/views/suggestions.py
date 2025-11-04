@@ -21,6 +21,7 @@ def index(request):
             "created_at",
             "category__name",
             "customer__user__first_name",
+            "customer__profile_img_url",
         )
         .select_related("category", "customer", "customer__user")
         .order_by("-created_at")
