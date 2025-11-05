@@ -1,0 +1,73 @@
+<article class="border rounded-xl p-5 bg-white hover:shadow-md transition-shadow">
+    <div class="flex items-start justify-between">
+        <div class="flex justify-between w-full">
+            {% if suggestion.status %}
+            <span class="justify-start text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700">
+                {{ suggestion.get_status_display|default:suggestion.status }}
+            </span>
+            {% endif %}
+
+            {% if suggestion.category and suggestion.category.name %}
+            <span class="justify-end text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700 bg-emerald-50">
+                {{ suggestion.category.name }}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <h3 class="mt-3 text-lg font-semibold text-gray-900 line-clamp-2">{{ suggestion.title }}</h3>
+    <p class="mt-2 text-sm text-gray-600 line-clamp-3">{{ suggestion.description|default:""|truncatewords:30 }}</p>
+
+    <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+        <div class="flex gap-2 items-center">
+            {% if suggestion.customer and suggestion.customer.profile_img_url %}
+            <img src="{{ suggestion.customer.profile_img_url }}" alt="Avatar" class="w-5 h-5 rounded-full object-cover" />
+            {% else %}
+            <span class="w-5 h-5 rounded-full bg-gray-200 inline-block"></span>
+            {% endif %}
+            <span>
+                {{ suggestion.customer.user.first_name|default:"" }}
+            </span>
+        </div>
+        <div class="flex gap-1 items-center">
+            <span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.33325 1.33337V4.00004" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10.6667 1.33337V4.00004" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 6.66663H14" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>                         
+            </span>
+            <time datetime="{{ suggestion.created_at|date:'c' }}">{{ suggestion.created_at|timesince }} atrás</time>
+        </div>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between text-xs text-gray-600">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1">
+                {% if suggestion.user_voted  %}
+                    <button class="p-1 text-emerald-600" aria-label="Votar">
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" fill="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                        
+                    </button>
+                {% else %}
+                    <button class="p-1 hover:text-emerald-600" aria-label="Votar">
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                        
+                    </button>
+                {% endif %}
+                <span class="font-medium">{{ suggestion.votes_count|default:0 }}</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <button class="p-1 hover:text-emerald-600" aria-label="Comentar">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>   
+                </button>                     
+                <span class="font-medium">{{ suggestion.comments_count|default:0 }}</span>
+            </div>
+        </div>
+    </div>
+</article>
