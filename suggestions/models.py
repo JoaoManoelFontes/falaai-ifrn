@@ -34,6 +34,12 @@ class Suggestion(models.Model):
         verbose_name_plural = "Sugestões"
         ordering = ["-created_at"]
 
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["created_at"]),
+            models.Index(fields=["category"]),
+        ]
+
     def __str__(self):
         return self.title
 

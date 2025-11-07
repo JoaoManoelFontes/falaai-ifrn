@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, ExpressionWrapper, F, OuterRef
+from django.db.models.functions import Coalesce
+from django.forms import FloatField
 from django.shortcuts import redirect, render
 
 from suggestions.forms import SuggestionForm
@@ -33,11 +35,30 @@ def index(request):
         )
         .select_related("category", "customer", "customer__user")
         .annotate(user_voted=Exists(user_voted))
-        .order_by("-created_at")
         .exclude(status=Suggestion.Status.IMPLEMENTED)
     )
 
-    return render(request, "index.html", {"suggestions": suggestions})
+    filter_type = request.GET.get("filter")
+
+    if filter_type == "featured":
+        suggestions = suggestions.annotate(
+            featured_score=ExpressionWrapper(
+                (Coalesce(F("votes_count"), 0) + Coalesce(F("comments_count"), 0))
+                / 2.0,
+                output_field=FloatField(),
+            )
+        ).order_by("-featured_score", "-created_at")
+
+    elif filter_type == "most_voted":
+        suggestions = suggestions.order_by("-votes_count", "-created_at")
+
+    else:
+        filter_type = "default"
+        suggestions = suggestions.order_by("-created_at")
+
+    return render(
+        request, "index.html", {"suggestions": suggestions, "filter_type": filter_type}
+    )
 
 
 def create_suggestion(request):
