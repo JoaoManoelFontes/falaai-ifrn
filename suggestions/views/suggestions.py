@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from suggestions.forms import SuggestionForm
 from suggestions.models import Suggestion
@@ -56,3 +56,9 @@ def create_suggestion(request):
 
     form = SuggestionForm()
     return render(request, "suggestion_form.html", {"form": form})
+
+
+def one_suggestion(request, suggestion_id):
+    suggestion = get_object_or_404(Suggestion, pk=suggestion_id)
+    context = {'suggestion':suggestion}
+    return render(request, 'one_suggestion.html', context)
