@@ -1,1 +1,134 @@
 {% extends "base.html" %}
+
+{% block content %}
+{% if suggestion %}
+
+<div class="flex px-12 py-8 gap-20 items-start bg-green-100">
+
+
+
+    <div class="bg-white p-6 rounded-xl">
+        <span
+            class="justify-end text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700 bg-emerald-50">
+            {{ suggestion.category.name }}
+        </span>
+
+        <h3 class="mt-3 text-2xl font-bold text-green-600 line-clamp-2">{{ suggestion.title }}</h3>
+
+        <p class="mt-2 mb-6">{{ suggestion.description|default:"" }} </p>
+
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1">
+                {% if suggestion.user_voted %}
+                <button class="p-1 text-emerald-600" aria-label="Votar">
+                    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
+                            stroke="currentColor" fill="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                {% else %}
+                <button class="p-1 hover:text-emerald-600" aria-label="Votar">
+                    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
+                            stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                {% endif %}
+                <span class="font-medium">{{ suggestion.votes_count|default:0 }}</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <button class="p-1 hover:text-emerald-600" aria-label="Comentar">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z"
+                            stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <span class="font-medium">{{ suggestion.comments_count|default:0 }}</span>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="flex flex-col bg-white min-w-[360px] p-6 rounded-xl gap-6">
+        <h2 class="font-bold">Autor(a) do projeto:</h2>
+        <div class="flex justify-between items-center gap-6">
+            <img src="{{ suggestion.customer.profile_img_url }}" alt="{{ suggestion.customer.user.first_name }}"
+                class="w-12 h-12 rounded-full object-cover"
+                title="Imagem de perfil de: {{ suggestion.customer.user.first_name }}" />
+
+            <p>{{ suggestion.customer.user.first_name|default:"" }}</p>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <div class="flex gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-id-card-icon lucide-id-card">
+                    <path d="M16 10h2" />
+                    <path d="M16 14h2" />
+                    <path d="M6.17 15a3 3 0 0 1 5.66 0" />
+                    <circle cx="9" cy="11" r="2" />
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                </svg>
+                <p>{{ suggestion.customer.user|default:"" }}</p>
+            </div>
+
+            <div class="flex gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-graduation-cap-icon lucide-graduation-cap">
+                    <path
+                        d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                    <path d="M22 10v6" />
+                    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+                </svg>
+                <p>{{ suggestion.customer.course|default:"" }}</p>
+            </div>
+        </div>
+
+        <!-- TODO: Adicionar chave para o email escolar aqui: -->
+        <a href="mailto:emailescolar@aqui.com"
+            class="flex gap-4 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-4 py-3 justify-center items-center rounded-lg text-lg transition"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-user-icon lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg> Entre
+            em
+            contato
+            </svg></a>
+    </div>
+
+    <!-- <div class="flex flex-col bg-white min-w-[340px] p-6 rounded-xl">
+        <div class="flex gap-4 items-center">
+            {% if suggestion.customer and suggestion.customer.profile_img_url %}
+            <img src="{{ suggestion.customer.profile_img_url }}" alt="Avatar"
+                class="w-12 h-12 rounded-full object-cover" />
+            {% else %}
+            <span class="w-5 h-5 rounded-full bg-gray-200 inline-block"></span>
+            {% endif %}
+            <span>
+                {{ suggestion.customer.user.first_name|default:"" }}
+            </span>
+        </div> -->
+
+    <!-- {{ suggestion.customer.user|default:"" }}
+
+    {{ suggestion.customer.course|default:"" }}
+
+    {{ suggestion.customer.url_email|default:"" }} -->
+
+</div>
+
+</div>
+
+{% endif %}
+{% endblock %}
