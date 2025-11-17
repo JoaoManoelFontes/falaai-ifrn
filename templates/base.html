@@ -62,20 +62,27 @@
                 <div>
                     {% if request.user.is_authenticated %}
                     <div class="flex gap-4">
-                        <!-- TODO: link para criar nova ideia/projeto -->
-                        <a href="{% url 'create_suggestion' %}" class="flex items-center justify-center gap-2 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold px-4 py-2 rounded-md hover:brightness-90 hover:cursor-pointer transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                            Nova ideia
-                        </a>
+                        {% with name=request.user.get_full_name.split %}
+                            <button id="userMenuButton" class='hover:underline'>Olá, {{ name.0 }} {{ name.1 }}</button>
+                        {% endwith %}
 
-                        <form action="{% url 'logout' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="inline-flex items-center font-bold px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 hover:brightness-90 transition">
-                                Sair
-                            </button>
-                        </form>
+
+                        <div id="userMenu" 
+        class="absolute right-12 mt-8 w-40 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+    <ul class="py-2 text-sm text-gray-700">
+        <li><a href="#" class="flex block px-4 py-2 hover:bg-gray-100 items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Meu perfil</a></li>
+        <li><a href={% url 'create_suggestion' %} class="flex block px-4 py-2 hover:bg-gray-100 items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg> Nova ideia</a></li>
+        <li>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button class="flex w-full text-left px-4 py-2 hover:bg-red-100 items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sair</button>
+            </form>
+        </li>
+    </ul>
+</div>
+
                     </div>
                     {% else %}
                         <a href="{% url 'auth' %}" class="flex gap-2 font-semibold border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-200 transition"> 
@@ -161,5 +168,29 @@
             }
         });
     })();
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const button = document.getElementById("userMenuButton");
+        const menu = document.getElementById("userMenu");
+
+        
+        button.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menu.classList.toggle("hidden");
+        });
+
+        
+        document.addEventListener("click", () => {
+            if (!menu.classList.contains("hidden")) {
+                menu.classList.add("hidden");
+            }
+        });
+
+        
+        menu.addEventListener("click", (e) => {
+            e.stopPropagation();
+        });
+    });
+
 </script>
 </html>
