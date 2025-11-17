@@ -1,61 +1,65 @@
 {% extends 'base.html' %}
-        {% block content %}
+{% block content %}
 
 
 <section class="flex items-center justify-center  text-center text-white overflow-hidden">
     <!-- Imagem -->
     <div class="mb-6">
-        <img src="static/images/Section.svg" class="inset-0 w-full h-full object-cover"alt="Imagem de fundo">
+        <img src="static/images/Section.svg" class="inset-0 w-full h-full object-cover" alt="Imagem de fundo">
     </div>
 </section>
 
 <section class=" mb-6 min-h-screen text-center">
-        <!-- Título -->
-        <div class="mb-6">
-            <h2 class="text-4xl font-bold">
-                Como <span class="text-green-700">Funciona</span>
-            </h2>
-            <p class="text-gray-600 text-lg mb-6 mt-2">
-                Um processo simples e democrático para transformar ideias em mudanças reais
-            </p>
-        </div>
+    <!-- Título -->
+    <div class="mb-6">
+        <h2 class="text-4xl font-bold">
+            Como <span class="text-green-700">Funciona</span>
+        </h2>
+        <p class="text-gray-600 text-lg mb-6 mt-2">
+            Um processo simples e democrático para transformar ideias em mudanças reais
+        </p>
+    </div>
     <!-- Cards -->
     <div class="flex justify-center ">
         <div class=" ">
             <div class="flex flex-wrap justify-center gap-6 mt-10">
                 <!-- CARD -->
-                <div class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
                     <img src="static/images/Compartilhe sua Ideia.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Compartilhe sua Ideia</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                    Submeta sua ideia para avaliação.
+                        Submeta sua ideia para avaliação.
                     </p>
                 </div>
 
                 <!-- CARD -->
-                <div class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
                     <img src="static/images/Discussão Colaborativa.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Discussão Colaborativa</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                    Participe da conversa e melhore a ideia.
+                        Participe da conversa e melhore a ideia.
                     </p>
                 </div>
 
                 <!-- CARD -->
-                <div class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
                     <img src="static/images/Votação Democrática.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Votação Democrática</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                    Vote nas melhores sugestões.
+                        Vote nas melhores sugestões.
                     </p>
                 </div>
 
                 <!-- CARD -->
-                <div class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
                     <img src="static/images/Implementação.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Implementação</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                    O ideia é colocada em prática.
+                        O ideia é colocada em prática.
                     </p>
                 </div>
             </div>
@@ -63,12 +67,14 @@
     </div>
     <div class="mt-6 bg-white p-8 shadow rounded-xl max-w-lg mx-auto">
         <p class="mb-6 text-3xl font-semibold">Pronto para Inovar?</p>
-        <button class=" bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:cursor-pointer transition">
+        <button
+            class=" bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:cursor-pointer transition">
             <a href="{% url 'create_suggestion' %}">
                 + Compartilhar ideia
             </a>
         </button>
-        <p class="mt-3 text-gray-600 text-sm">Junte-se à comunidade inovadora e ajude a transformar nossa instituição</p>
+        <p class="mt-3 text-gray-600 text-sm">Junte-se à comunidade inovadora e ajude a transformar nossa instituição
+        </p>
     </div>
 </section>
 
@@ -169,6 +175,7 @@
 
 
 </body>
+
 </html>
 
 {% endblock %}
