@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, ExpressionWrapper, F, FloatField, OuterRef
+from django.db.models.functions import Coalesce
 from django.shortcuts import redirect, render, get_object_or_404
 
+from suggestions.enums import SuggestionOrdenationTypes
 from suggestions.forms import SuggestionForm
-from suggestions.models import Suggestion
+from suggestions.models import Category, Suggestion
 
 
 @login_required(login_url="auth")
@@ -33,11 +35,49 @@ def index(request):
         )
         .select_related("category", "customer", "customer__user")
         .annotate(user_voted=Exists(user_voted))
-        .order_by("-created_at")
         .exclude(status=Suggestion.Status.IMPLEMENTED)
     )
 
-    return render(request, "index.html", {"suggestions": suggestions})
+    ordenation_type = request.GET.get("ordenation", SuggestionOrdenationTypes.DEFAULT)
+    category_id = request.GET.get("category")
+    status = request.GET.get("status")
+
+    if ordenation_type == SuggestionOrdenationTypes.FEATURED:
+        suggestions = suggestions.annotate(
+            featured_score=ExpressionWrapper(
+                (Coalesce(F("votes_count"), 0) + Coalesce(F("comments_count"), 0))
+                / 2.0,
+                output_field=FloatField(),
+            )
+        ).order_by("-featured_score", "-created_at")
+
+    elif ordenation_type == SuggestionOrdenationTypes.MOST_VOTED:
+        suggestions = suggestions.order_by("-votes_count", "-created_at")
+
+    else:
+        ordenation_type = SuggestionOrdenationTypes.DEFAULT
+        suggestions = suggestions.order_by("-created_at")
+
+    if category_id and category_id != "":
+        category_id = int(category_id)
+        suggestions = suggestions.filter(category_id=category_id)
+
+    if status and status != "":
+        suggestions = suggestions.filter(status=status)
+
+    return render(
+        request,
+        "index.html",
+        {
+            "suggestions": suggestions,
+            "ordenation_type": ordenation_type,
+            "ordenation_types": SuggestionOrdenationTypes.choices,
+            "category": category_id,
+            "categories": Category.objects.all().only("id", "name"),
+            "status_types": Suggestion.Status.choices,
+            "status": status,
+        },
+    )
 
 
 def create_suggestion(request):
