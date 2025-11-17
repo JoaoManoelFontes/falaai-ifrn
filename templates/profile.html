@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Perfil do Usuário -->
+<section class="py-12 bg-white">
+    <div class="mx-10 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <!-- Avatar -->
+                    <div class="flex-shrink-0">
+                        {% if customer.profile_img_url %}
+                            <img src="{{ customer.profile_img_url }}" alt="Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-green-500" />
+                        {% else %}
+                            <div class="w-32 h-32 rounded-full bg-gray-200 border-4 border-green-500 flex items-center justify-center">
+                                <span class="text-4xl font-bold text-gray-400">
+                                    {{ customer.user.first_name|first|upper }}
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Informações do Usuário -->
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                            {{ customer.user.first_name }} {{ customer.user.last_name|default:"" }}
+                        </h1>
+                        <p class="text-gray-600 mb-4">
+                            <span class="font-semibold">Curso:</span> {{ customer.course }}
+                        </p>
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                            <div class="flex items-center gap-1">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.33325 1.33337V4.00004" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10.6667 1.33337V4.00004" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 6.66663H14" stroke="#64748B" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <time datetime="{{ customer.created_at|date:'c' }}">
+                                    Membro desde {{ customer.created_at|date:"F Y" }}
+                                </time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Minhas Sugestões -->
+<section id="sugestoes" class="py-12 bg-gray-50">
+    <div class="mx-10 px-6">
+        <h2 class="text-3xl font-bold mb-2">Minhas <span class="text-green-600">Sugestões</span></h2>
+        <p class="text-gray-600 mb-6">Gerencie e acompanhe todas as suas ideias e propostas</p>
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            {% for value, label in ordenation_types %}
+              <a
+                href="?ordenation={{ value }}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}#sugestoes"
+                class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium border transition
+                       {% if ordenation_type == value %}
+                         bg-green-600 text-zinc-50
+                       {% else %}
+                         text-neutral-950 bg-white border-slate-200 hover:bg-gray-200
+                       {% endif %}"
+              >
+                {% if value == 'featured' %}
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.66659 9.66667C6.10861 9.66667 6.53254 9.49107 6.8451 9.17851C7.15766 8.86595 7.33325 8.44203 7.33325 8C7.33325 7.08 6.99992 6.66667 6.66659 6C5.95192 4.57133 6.51725 3.29733 7.99992 2C8.33325 3.66667 9.33325 5.26667 10.6666 6.33333C11.9999 7.4 12.6666 8.66667 12.6666 10C12.6666 10.6128 12.5459 11.2197 12.3114 11.7859C12.0768 12.352 11.7331 12.8665 11.2998 13.2998C10.8664 13.7332 10.352 14.0769 9.78578 14.3114C9.21959 14.546 8.61275 14.6667 7.99992 14.6667C7.38708 14.6667 6.78025 14.546 6.21406 14.3114C5.64788 14.0769 5.13343 13.7332 4.70009 13.2998C4.26675 12.8665 3.923 12.352 3.68848 11.7859C3.45396 11.2197 3.33325 10.6128 3.33325 10C3.33325 9.23133 3.62192 8.47067 3.99992 8C3.99992 8.44203 4.17551 8.86595 4.48807 9.17851C4.80063 9.49107 5.22456 9.66667 5.66659 9.66667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>            
+                {% elif value == 'most_voted' %}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.6666 4.66663L8.99992 10.3333L5.66659 6.99996L1.33325 11.3333" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10.6667 4.66663H14.6667V8.66663" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% elif value == 'default' %}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00004C14.6666 4.31814 11.6818 1.33337 7.99992 1.33337C4.31802 1.33337 1.33325 4.31814 1.33325 8.00004C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 4V8L10.6667 9.33333" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>                  
+                {% endif %}
+                {{ label }}
+              </a>
+            {% endfor %}
+          </div>
+          <div class="flex items-center gap-3">
+            <select
+              onchange="updateFilters('category', this.value)"
+              class="border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option value="">Todas as categorias</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
+                  {{ cat.name }}
+                </option>
+              {% endfor %}
+            </select>
+        
+            <select
+              onchange="updateFilters('status', this.value)"
+              class="border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option value="">Todos os status</option>
+              {% for value, label in status_types %}
+                <option value="{{ value }}" {% if status == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        
+        <script>
+          function updateFilters(filterType, value) {
+            const params = new URLSearchParams(window.location.search);
+            if (value === '') params.delete(filterType);
+            else params.set(filterType, value);
+            window.location.href = window.location.pathname + '?' + params.toString() + '#sugestoes';
+          }
+          
+          // Scroll para a seção de sugestões se houver hash na URL
+          if (window.location.hash === '#sugestoes') {
+            document.addEventListener('DOMContentLoaded', function() {
+              const section = document.getElementById('sugestoes');
+              if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            });
+          }
+        </script>
+        
+        <!-- Lista de Sugestões -->
+        <div class="space-y-0">
+          {% for suggestion in suggestions %}
+            <div class="flex items-start justify-between p-4 bg-white hover:bg-zinc-100 transition-colors border rounded-md shadow-md cursor-pointer">
+              <div class="flex-1 pr-4">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  {% if suggestion.status %}
+                  <span class="text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700">
+                    {{ suggestion.get_status_display|default:suggestion.status }}
+                  </span>
+                  {% endif %}
+
+                  {% if suggestion.category and suggestion.category.name %}
+                  <span class="text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700 bg-emerald-50">
+                    {{ suggestion.category.name }}
+                  </span>
+                  {% endif %}
+                </div>
+                <h3 class="font-bold text-black mb-1">{{ suggestion.title }}</h3>
+                <p class="text-gray-600 text-sm line-clamp-1">
+                  {{ suggestion.description|default:""|truncatewords:20 }}
+                </p>
+              </div>
+              
+              <div class="flex items-end gap-4 flex-shrink-0">
+                <div class="flex items-center gap-1">
+                  {% if suggestion.user_voted  %}
+                    <button class="p-1 text-emerald-600" aria-label="Votar">
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" fill="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                        
+                    </button>
+                {% else %}
+                    <button class="p-1 hover:text-emerald-600" aria-label="Votar">
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>                        
+                    </button>
+                {% endif %}
+                  <span class="text-sm font-medium">{{ suggestion.votes_count|default:0 }}</span>
+                </div>
+                
+                <div class="flex items-center gap-1">
+                  <button class="p-1 hover:text-emerald-600" aria-label="Comentar">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>   
+                </button>                     
+                  <span class="text-sm font-medium">{{ suggestion.comments_count|default:0 }}</span>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="text-center py-12 bg-white">
+              <p class="text-gray-600 text-lg mb-4">Você ainda não criou nenhuma sugestão.</p>
+              <a href="{% url 'create_suggestion' %}" class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition">
+                + Compartilhar primeira ideia
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+        
+    </div>
+</section>
+
+{% endblock %}
+
