@@ -2,34 +2,49 @@
 {% block content %}
 
 
-<section class="flex items-center justify-center  text-center text-white overflow-hidden">
-    <!-- Imagem -->
-    <div class="mb-6">
-        <img src="static/images/Section.svg" class="inset-0 w-full h-full object-cover" alt="Imagem de fundo">
+<!-- HeroSection -->
+
+<section class="">
+      <div class=" relative">
+        <img src="static/images/inovation_and_colaboration.svg" class=" w-full h-full object-cover " alt="Imagem de fundo">
+        <div class="absolute inset-0 z-10 flex flex-col items-center justify-between py-12 text-white text-center bg-gradient-to-r from-[#000000af] to-[#0d7a165e]">
+
+              <img src="static/images/lamp.svg" alt="Ícone de lâmpada">
+              <h1 class="font-bold text-7xl max-w-[760px]">Transforme suas ideias em realidade</h1>
+              <p class="text-2xl max-w-[720px]">A plataforma onde a comunidade acadêmica compartilha, discute e vota nas melhores ideias para inovar nossa instituição</p>
+              <label class="flex gap-2 px-4 py-2 bg-black rounded-lg items-center">Conheça nosso sistema <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-icon lucide-arrow-down animate-bounce"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></label>
+          </div>
     </div>
 </section>
 
-<section class=" mb-6 min-h-screen text-center">
+{% comment %} <section>
+      <div class="mb-6">
+        <img src="static/images/Section.svg" class="w-full h-full object-cover" alt="Imagem de fundo">
+    </div>
+</section> {% endcomment %}
+
+
+<section class="py-12 text-center flex flex-col gap-20">
     <!-- Título -->
-    <div class="mb-6">
+    <div>
         <h2 class="text-4xl font-bold">
             Como <span class="text-green-700">Funciona</span>
         </h2>
-        <p class="text-gray-600 text-lg mb-6 mt-2">
+        <p class="text-gray-600 text-lg mt-2">
             Um processo simples e democrático para transformar ideias em mudanças reais
         </p>
     </div>
     <!-- Cards -->
-    <div class="flex justify-center ">
-        <div class=" ">
-            <div class="flex flex-wrap justify-center gap-6 mt-10">
+    <div class="flex justify-center">
+        <div>
+            <div class="flex flex-wrap justify-center gap-6">
                 <!-- CARD -->
                 <div
                     class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
                     <img src="static/images/Compartilhe sua Ideia.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Compartilhe sua Ideia</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                        Submeta sua ideia para avaliação.
+                        Submeta sua proposta de melhoria ou inovação para a comunidade acadêmica avaliada.
                     </p>
                 </div>
 
@@ -39,7 +54,7 @@
                     <img src="static/images/Discussão Colaborativa.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Discussão Colaborativa</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                        Participe da conversa e melhore a ideia.
+                        A comunidade debate, oferece sugestões e melhorias coletivamente nas propostas.
                     </p>
                 </div>
 
@@ -49,7 +64,7 @@
                     <img src="static/images/Votação Democrática.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Votação Democrática</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                        Vote nas melhores sugestões.
+                        Todos podem votar nas melhores ideias, priorizando as mais impactantes.
                     </p>
                 </div>
 
@@ -59,21 +74,21 @@
                     <img src="static/images/Implementação.svg" class="h-24 mb-4 mx-auto" alt="">
                     <h3 class="font-semibold text-lg">Implementação</h3>
                     <p class="text-sm text-gray-500 mt-1">
-                        O ideia é colocada em prática.
+                        As ideias mais votadas são comprovadas para implementação pela instituição.
                     </p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mt-6 bg-white p-8 shadow rounded-xl max-w-lg mx-auto">
-        <p class="mb-6 text-3xl font-semibold">Pronto para Inovar?</p>
+    <div class="flex flex-col gap-4 items-center bg-white p-8 shadow rounded-xl max-w-lg mx-auto">
+        <p class="text-3xl font-semibold">Pronto para Inovar?</p>
         <button
-            class=" bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:cursor-pointer transition">
-            <a href="{% url 'create_suggestion' %}">
-                + Compartilhar ideia
+            class=" bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:cursor-pointer transition max-w-72">
+            <a class="flex items-center justify-center gap-2" href="{% url 'create_suggestion' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Compartilhar ideia
             </a>
         </button>
-        <p class="mt-3 text-gray-600 text-sm">Junte-se à comunidade inovadora e ajude a transformar nossa instituição
+        <p class=" text-gray-600 text-sm">Junte-se à comunidade inovadora e ajude a transformar nossa instituição
         </p>
     </div>
 </section>
