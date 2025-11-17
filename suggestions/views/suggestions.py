@@ -10,6 +10,75 @@ from suggestions.models import Category, Suggestion
 
 
 @login_required(login_url="auth")
+def profile(request):
+    """Página de perfil do usuário com suas sugestões."""
+
+    user_customer = request.user.customer
+
+    user_voted = Suggestion.votes.through.objects.filter(
+        suggestion_id=OuterRef("pk"), customer_id=user_customer.id
+    )
+
+    suggestions = (
+        Suggestion.objects.filter(customer=user_customer)
+        .only(
+            "id",
+            "title",
+            "status",
+            "description",
+            "votes_count",
+            "comments_count",
+            "created_at",
+            "category__name",
+        )
+        .select_related("category")
+        .annotate(user_voted=Exists(user_voted))
+    )
+
+    ordenation_type = request.GET.get("ordenation", SuggestionOrdenationTypes.DEFAULT)
+    category_id = request.GET.get("category")
+    status = request.GET.get("status")
+
+    if ordenation_type == SuggestionOrdenationTypes.FEATURED:
+        suggestions = suggestions.annotate(
+            featured_score=ExpressionWrapper(
+                (Coalesce(F("votes_count"), 0) + Coalesce(F("comments_count"), 0))
+                / 2.0,
+                output_field=FloatField(),
+            )
+        ).order_by("-featured_score", "-created_at")
+
+    elif ordenation_type == SuggestionOrdenationTypes.MOST_VOTED:
+        suggestions = suggestions.order_by("-votes_count", "-created_at")
+
+    else:
+        ordenation_type = SuggestionOrdenationTypes.DEFAULT
+        suggestions = suggestions.order_by("-created_at")
+
+    if category_id and category_id != "":
+        category_id = int(category_id)
+        suggestions = suggestions.filter(category_id=category_id)
+
+    if status and status != "":
+        suggestions = suggestions.filter(status=status)
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "customer": user_customer,
+            "suggestions": suggestions,
+            "ordenation_type": ordenation_type,
+            "ordenation_types": SuggestionOrdenationTypes.choices,
+            "category": category_id,
+            "categories": Category.objects.all().only("id", "name"),
+            "status_types": Suggestion.Status.choices,
+            "status": status,
+        },
+    )
+
+
+@login_required(login_url="auth")
 def index(request):
     """Página inicial das sugestões."""
 
