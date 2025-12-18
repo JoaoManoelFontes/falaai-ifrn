@@ -1,5 +1,5 @@
 <a href="{% url 'one_suggestion' suggestion.id %}">
-    <article class="border rounded-xl p-5 bg-white hover:shadow-md transition-shadow">
+    <article class="border rounded-xl p-5 bg-white hover:shadow-md transition-shadow h-64 flex flex-col">
         <div class="flex items-start justify-between">
             <div class="flex justify-between w-full">
                 {% if suggestion.status %}
@@ -18,9 +18,9 @@
         </div>
 
         <h3 class="mt-3 text-lg font-semibold text-gray-900 truncate" title="{{ suggestion.title }}">{{ suggestion.title }}</h3>
-        <p class="mt-2 text-sm text-gray-600 line-clamp-3">{{ suggestion.description|default:""|truncatewords:30 }}</p>
+        <p class="mt-2 text-sm text-gray-600 line-clamp-3 flex-grow">{{ suggestion.description|default:""|truncatewords:30 }}</p>
 
-        <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+        <div class="mt-auto flex flex-wrap items-center gap-4 text-xs text-gray-500">
             <div class="flex gap-2 items-center">
                 {% if suggestion.customer and suggestion.customer.profile_img_url %}
                 <img src="{{ suggestion.customer.profile_img_url }}" alt="Avatar"
