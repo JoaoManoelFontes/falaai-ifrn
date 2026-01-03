@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 
 class Suggestion(models.Model):
@@ -42,6 +42,28 @@ class Suggestion(models.Model):
 
     def __str__(self):
         return self.title
+
+    @transaction.atomic
+    def toggle_vote(self, customer) -> bool:
+        """
+        Alterna o voto do customer:
+        - Se já votou: remove o voto (desvotar)
+        - Se não votou: adiciona o voto (votar)
+        """
+
+        if self.votes.filter(id=customer.id).exists():
+            self.votes.remove(customer)
+            self.votes_count = models.F("votes_count") - 1
+            voted = False
+        else:
+            self.votes.add(customer)
+            self.votes_count = models.F("votes_count") + 1
+            voted = True
+
+        self.save(update_fields=["votes_count"])
+        self.refresh_from_db(fields=["votes_count"])
+
+        return voted
 
 
 class Media(models.Model):

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, ExpressionWrapper, F, FloatField, OuterRef
 from django.db.models.functions import Coalesce
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 
 from suggestions.enums import SuggestionOrdenationTypes
 from suggestions.forms import SuggestionForm
@@ -169,5 +169,11 @@ def create_suggestion(request):
 
 def one_suggestion(request, suggestion_id):
     suggestion = get_object_or_404(Suggestion, pk=suggestion_id)
-    context = {'suggestion':suggestion}
-    return render(request, 'one_suggestion.html', context)
+
+    user_voted = False
+    if request.user.is_authenticated:
+        user_voted = suggestion.votes.filter(id=request.user.customer.id).exists()
+
+    suggestion.user_voted = user_voted
+    context = {"suggestion": suggestion}
+    return render(request, "one_suggestion.html", context)
