@@ -1,6 +1,6 @@
 from django import forms
 
-from suggestions.models import Suggestion
+from suggestions.models import Comment, Suggestion
 
 
 class SuggestionForm(forms.ModelForm):
@@ -41,3 +41,26 @@ class SuggestionForm(forms.ModelForm):
                 "A descrição precisa conter 20 ou mais caracteres."
             )
         return description
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text"]
+        widgets = {
+            "text": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": "w-full border-2 px-4 py-2 rounded-md mb-4 outline-none focus:border-green-600",
+                    "placeholder": "Adicione um comentário...",
+                }
+            ),
+        }
+
+    def clean_text(self):
+        text = self.cleaned_data.get("text")
+        if not text or len(text.strip()) < 3:
+            raise forms.ValidationError(
+                "O comentário precisa conter pelo menos 3 caracteres."
+            )
+        return text.strip()
