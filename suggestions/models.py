@@ -65,6 +65,23 @@ class Suggestion(models.Model):
 
         return voted
 
+    @transaction.atomic
+    def add_comment(self, customer, text):
+        """
+        Adiciona um comentário à sugestão e atualiza o contador.
+        Retorna o comentário criado.
+        """
+        comment = Comment.objects.create(
+            customer=customer,
+            suggestion=self,
+            text=text,
+        )
+        self.comments_count = models.F("comments_count") + 1
+        self.save(update_fields=["comments_count"])
+        self.refresh_from_db(fields=["comments_count"])
+
+        return comment
+
 
 class Media(models.Model):
     suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE)
@@ -81,7 +98,9 @@ class Media(models.Model):
 
 class Comment(models.Model):
     customer = models.ForeignKey("project_auth.Customer", on_delete=models.CASCADE)
-    suggestion = models.ForeignKey("suggestions.Suggestion", on_delete=models.CASCADE)
+    suggestion = models.ForeignKey(
+        "suggestions.Suggestion", on_delete=models.CASCADE, related_name="comments"
+    )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

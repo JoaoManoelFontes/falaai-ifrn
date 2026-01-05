@@ -5,7 +5,7 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 
 from suggestions.enums import SuggestionOrdenationTypes
-from suggestions.forms import SuggestionForm
+from suggestions.forms import CommentForm, SuggestionForm
 from suggestions.models import Category, Suggestion
 
 
@@ -168,12 +168,28 @@ def create_suggestion(request):
 
 
 def one_suggestion(request, suggestion_id):
-    suggestion = get_object_or_404(Suggestion, pk=suggestion_id)
+    suggestion = get_object_or_404(
+        Suggestion.objects.select_related("category", "customer", "customer__user"),
+        pk=suggestion_id,
+    )
 
     user_voted = False
     if request.user.is_authenticated:
         user_voted = suggestion.votes.filter(id=request.user.customer.id).exists()
 
     suggestion.user_voted = user_voted
-    context = {"suggestion": suggestion}
+
+    # Buscar comentários relacionados
+    comments = suggestion.comments.select_related(
+        "customer", "customer__user"
+    ).order_by("-created_at")
+
+    # Formulário de comentário
+    comment_form = CommentForm()
+
+    context = {
+        "suggestion": suggestion,
+        "comments": comments,
+        "comment_form": comment_form,
+    }
     return render(request, "one_suggestion.html", context)
