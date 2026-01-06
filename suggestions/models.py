@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 
 class Suggestion(models.Model):
@@ -43,6 +43,45 @@ class Suggestion(models.Model):
     def __str__(self):
         return self.title
 
+    @transaction.atomic
+    def toggle_vote(self, customer) -> bool:
+        """
+        Alterna o voto do customer:
+        - Se já votou: remove o voto (desvotar)
+        - Se não votou: adiciona o voto (votar)
+        """
+
+        if self.votes.filter(id=customer.id).exists():
+            self.votes.remove(customer)
+            self.votes_count = models.F("votes_count") - 1
+            voted = False
+        else:
+            self.votes.add(customer)
+            self.votes_count = models.F("votes_count") + 1
+            voted = True
+
+        self.save(update_fields=["votes_count"])
+        self.refresh_from_db(fields=["votes_count"])
+
+        return voted
+
+    @transaction.atomic
+    def add_comment(self, customer, text):
+        """
+        Adiciona um comentário à sugestão e atualiza o contador.
+        Retorna o comentário criado.
+        """
+        comment = Comment.objects.create(
+            customer=customer,
+            suggestion=self,
+            text=text,
+        )
+        self.comments_count = models.F("comments_count") + 1
+        self.save(update_fields=["comments_count"])
+        self.refresh_from_db(fields=["comments_count"])
+
+        return comment
+
 
 class Media(models.Model):
     suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE)
@@ -59,7 +98,9 @@ class Media(models.Model):
 
 class Comment(models.Model):
     customer = models.ForeignKey("project_auth.Customer", on_delete=models.CASCADE)
-    suggestion = models.ForeignKey("suggestions.Suggestion", on_delete=models.CASCADE)
+    suggestion = models.ForeignKey(
+        "suggestions.Suggestion", on_delete=models.CASCADE, related_name="comments"
+    )
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

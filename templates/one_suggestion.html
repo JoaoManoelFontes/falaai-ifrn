@@ -26,30 +26,29 @@
                 <p class="mt-2 mb-6">{{ suggestion.description|default:""}}</p>
 
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-1">
+                    <form action="{% url 'toggle_vote' suggestion.id %}" method="POST" class="flex items-center gap-1">
+                        {% csrf_token %}
                         {% if suggestion.user_voted %}
-                        <button class="p-1 text-emerald-600" aria-label="Votar">
-                            <svg width="15" height="14" viewBox="0 0 15 14" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
-                                    stroke="currentColor" fill="currentColor" stroke-width="1.33333"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        {% else %}
-                        <button class="p-1 hover:text-emerald-600" aria-label="Votar">
-                            <svg width="15" height="14" viewBox="0 0 15 14" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
-                                    stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        {% endif %}
+                            <button type="submit" class="p-1 text-emerald-600" aria-label="Remover voto">
+                                <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
+                                        stroke="currentColor" fill="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            {% else %}
+                            <button type="submit" class="p-1 hover:text-emerald-600" aria-label="Votar">
+                                <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z"
+                                        stroke="currentColor" stroke-width="1.33333" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            {% endif %}
                         <span class="font-medium">{{ suggestion.votes_count|default:0 }}</span>
-                    </div>
+                    </form>
                     <div class="flex items-center gap-1">
                         <button class="p-1 hover:text-emerald-600" aria-label="Comentar">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -67,34 +66,52 @@
 
 
             </section>
-            <section class="bg-white p-6 rounded-xl">
+            <section id="comments" class="bg-white p-6 rounded-xl">
                 <h2 class="font-bold text-xl mb-6">Comentários:</h2>
-                <!-- TODO: Ajustar o formulário -->
-                <form class="mb-6">
-                    <textarea placeholder="Adicione um comentário..."
-                        class="w-full min-h-32 border-2 px-4 py-2 rounded-md mb-4 outline-none focus:border-green-600"></textarea>
+                
+                {% if user.is_authenticated %}
+                <form action="{% url 'create_comment' suggestion.id %}" method="POST" class="mb-6">
+                    {% csrf_token %}
+                    {{ comment_form.text }}
+                    {% if comment_form.text.errors %}
+                        <div class="text-red-600 text-sm mb-2">
+                            {{ comment_form.text.errors }}
+                        </div>
+                    {% endif %}
 
-                    <button type="button"
+                    <button type="submit"
                         class="px-4 py-2 border-2 border-green-600 text-green-600 hover:text-white hover:bg-green-600 rounded-lg transition">Comentar</button>
                 </form>
+                {% else %}
+                <div class="mb-6 p-4 bg-gray-100 rounded-lg text-center">
+                    <p class="text-gray-600">Você precisa estar logado para comentar.</p>
+                    <a href="{% url 'auth' %}" class="text-green-600 hover:underline">Fazer login</a>
+                </div>
+                {% endif %}
 
                 <div class="flex flex-col gap-4">
-                    <div class="flex gap-4 items-center">
-                        <!-- TODO: Adicionar chave da imagem de quem comentou -->
-                        <img src="{{ suggestion.customer.profile_img_url }}"
-                            alt="{{ suggestion.customer.user.first_name }}" class="w-8 h-8 rounded-full object-cover"
-                            title="Imagem de perfil de: {{ suggestion.customer.user.first_name }}" />
+                    {% if comments %}
+                        {% for comment in comments %}
+                        <div class="flex flex-col gap-2">
+                            <div class="flex gap-4 items-center">
+                                <img src="{{ comment.customer.profile_img_url }}"
+                                    alt="{{ comment.customer.user.first_name }}" class="w-8 h-8 rounded-full object-cover"
+                                    title="Imagem de perfil de: {{ comment.customer.user.first_name }}" />
 
-                        <p>{{ suggestion.customer.user.first_name|default:"" }}
-                        <p class="text-sm text-gray-500">16-11-2025</p>
-                        </p>
-                    </div>
-                    <!-- TODO: Adicionar chave de comentários -->
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae possimus nobis architecto
-                        officiis debitis libero itaque error facere? Consectetur enim nam nulla debitis a unde voluptate
-                        corrupti illo ex nemo.</p>
-
-                    <hr class="border-gray-200 w-full">
+                                <div class="flex flex-col">
+                                    <p class="font-medium">{{ comment.customer.user.first_name|default:"" }}</p>
+                                    <p class="text-sm text-gray-500">{{ comment.created_at|date:"d/m/Y H:i" }}</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700">{{ comment.text }}</p>
+                            {% if not forloop.last %}
+                            <hr class="border-gray-200 w-full">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-500 text-center py-4">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                    {% endif %}
                 </div>
             </section>
 
