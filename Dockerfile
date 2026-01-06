@@ -41,16 +41,16 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
+COPY scripts/entrypoint.sh /scripts/entrypoint.sh
+RUN chmod +x /scripts/entrypoint.sh \
+    && sed -i 's/\r$//' /scripts/entrypoint.sh
+
 COPY --chown=falaai:falaai . .
 
 RUN mkdir -p /app/staticfiles /app/media && \
     chown -R falaai:falaai /app/staticfiles /app/media
 
-COPY --from=tailwind /app/static/ ./static/
-
-COPY /scripts/entrypoint.sh /scripts/entrypoint.sh
-
-RUN chmod +x /scripts/entrypoint.sh
+COPY --from=tailwind --chown=falaai:falaai /app/static/ ./static/
 
 USER falaai
 
