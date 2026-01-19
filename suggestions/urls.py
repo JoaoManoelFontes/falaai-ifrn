@@ -1,7 +1,13 @@
 from django.urls import path
 
 from .views.reactions import create_comment, toggle_vote
-from .views.suggestions import create_suggestion, index, one_suggestion, profile
+from .views.suggestions import (
+    change_status,
+    create_suggestion,
+    index,
+    one_suggestion,
+    profile,
+)
 
 urlpatterns = [
     path("", index, name="index"),
@@ -10,4 +16,5 @@ urlpatterns = [
     path("<int:suggestion_id>/", one_suggestion, name="one_suggestion"),
     path("<int:suggestion_id>/toggle_vote/", toggle_vote, name="toggle_vote"),
     path("<int:suggestion_id>/comment/", create_comment, name="create_comment"),
+    path("<int:suggestion_id>/change_status/", change_status, name="change_status"),
 ]
