@@ -61,12 +61,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
-        "NAME": os.environ.get("POSTGRES_DB", "falaai_db"),
-        "USER": os.environ.get("POSTGRES_USER", "falaai"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "falaai"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "falaai_db",
+        "USER": "falaai",
+        "PASSWORD": "falaai",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
