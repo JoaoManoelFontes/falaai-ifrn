@@ -193,3 +193,57 @@ def one_suggestion(request, suggestion_id):
         "comment_form": comment_form,
     }
     return render(request, "one_suggestion.html", context)
+
+
+@login_required(login_url="auth")
+def change_status(request, suggestion_id):
+    """Altera o status de uma sugestão. Apenas staff pode fazer isso."""
+    if request.method != "POST":
+        return redirect("one_suggestion", suggestion_id=suggestion_id)
+
+    # Verificar se o usuário é staff
+    if not request.user.customer.isStaff:
+        messages.error(request, "Você não tem permissão para alterar o status.")
+        return redirect("one_suggestion", suggestion_id=suggestion_id)
+
+    suggestion = get_object_or_404(Suggestion, id=suggestion_id)
+    new_status = request.POST.get("status")
+
+    # Validar o status
+    valid_statuses = [choice[0] for choice in Suggestion.Status.choices]
+    if new_status not in valid_statuses:
+        messages.error(request, "Status inválido.")
+        return redirect("one_suggestion", suggestion_id=suggestion_id)
+
+    suggestion.status = new_status
+    suggestion.save(update_fields=["status"])
+    messages.success(
+        request, f"Status alterado para: {suggestion.get_status_display()}"
+    )
+
+    return redirect("one_suggestion", suggestion_id=suggestion_id)
+
+@login_required(login_url="auth")
+def deletar_sugestao(request, suggestion_id):
+    sugestao = get_object_or_404(Suggestion, id=suggestion_id)
+
+    if request.method == 'POST':
+        sugestao.delete()
+        return redirect('profile')
+    
+@login_required(login_url="auth")   
+def editar_sugestao(request, suggestion_id):
+    sugestao = get_object_or_404(Suggestion, id=suggestion_id)
+
+    if request.method == 'POST':
+        form = SuggestionForm(request.POST, instance=sugestao)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = SuggestionForm(instance=sugestao)
+
+    return render(request, 'edit.html', {
+        'form': form,
+        'suggestion': sugestao
+    })

@@ -134,7 +134,7 @@
         <!-- Lista de Sugestões -->
 <div class="flex flex-col gap-6">
   {% for suggestion in suggestions %}
-    <div class="relative flex items-center justify-between p-4 bg-white hover:bg-zinc-100 transition-colors border rounded-md shadow-md">
+  <div class="relative flex items-center justify-between p-4 bg-white hover:bg-zinc-100 transition-colors border rounded-md shadow-md">
 
       <!-- Link overlay (resolve o layout instável) -->
       <a
@@ -145,98 +145,100 @@
 
       <!-- Conteúdo -->
       <div class="relative z-10 flex flex-1 items-center justify-between">
+              <div class="flex gap-2" onclick="event.stopPropagation();">
+                <form class="flex items-center" method="POST">
+                  <a href="{% url 'editar_sugestao' suggestion.id %}"
+                    class="p-1 text-blue-500 hover:scale-110 transition"
+                    title="Editar: {{ suggestion.title }}"
+                    aria-label="Editar: {{ suggestion.title }}">
+                      
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-pencil-icon lucide-pencil">
+                          <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+                          <path d="m15 5 4 4"/>
+                      </svg>
+                  </a>
+                     
+                </form>
 
-        <div class="flex-1 pr-4">
-          <div class="flex items-start justify-between gap-2 mb-2">
-            {% if suggestion.status %}
-              <span class="text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700">
-                {{ suggestion.get_status_display|default:suggestion.status }}
-              </span>
-            {% endif %}
-
-            {% if suggestion.category and suggestion.category.name %}
-              <span class="text-xs px-2 py-1 rounded-full border border-emerald-200 text-emerald-700 bg-emerald-50">
-                {{ suggestion.category.name }}
-              </span>
-            {% endif %}
-          </div>
-
-          <h3 class="font-bold text-black mb-1">
-            {{ suggestion.title }}
-          </h3>
-
-          <p class="text-gray-600 text-sm line-clamp-1">
-            {{ suggestion.description|default:""|truncatewords:20 }}
-          </p>
-        </div>
-
-        <div class="flex gap-12">
-          <div class="flex justify-center items-center">
-            <div class="flex gap-4 flex-shrink-0">
-
-              <div class="flex items-center gap-1">
-                {% if suggestion.user_voted %}
-                  <button
-                    class="p-1 text-emerald-600"
-                    aria-label="Votar"
-                    onclick="event.preventDefault(); event.stopPropagation();">
-                      <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" fill="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                <form class="flex items-center" action="{% url 'deletar_sugestao' suggestion.id %}" method="post" onsubmit="return confirmarDelete('{{ suggestion.title }}');">
+                {% csrf_token %}
+                <button type="button"
+                        onclick="abrirModal('{{ suggestion.id }}')"
+                        class="p-1 text-red-500 hover:scale-110 transition"
+                        title="Excluir: {{ suggestion.title }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                        <path d="M3 6h18"/>
+                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                     </svg>
-                  </button>
-                {% else %}
-                  <button
-                    class="p-1 hover:text-emerald-600"
-                    aria-label="Votar"
-                    onclick="event.preventDefault(); event.stopPropagation();">
-                      <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                {% endif %}
-                <span class="text-sm font-medium">{{ suggestion.votes_count|default:0 }}</span>
-              </div>
+                </button>  
+                  
+                  
+                </form>
+                <div id="modal-delete-{{ suggestion.id }}"
+                    class="fixed inset-0 z-50 hidden items-center justify-center">
 
-              <div class="flex items-center gap-1">
-                <button
-                  class="p-1 hover:text-emerald-600"
-                  aria-label="Comentar"
-                  onclick="event.preventDefault(); event.stopPropagation();">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                </button>
-                <span class="text-sm font-medium">{{ suggestion.comments_count|default:0 }}</span>
-              </div>
+                    <!-- Fundo escuro + blur -->
+                    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                        onclick="fecharModal('{{ suggestion.id }}')"></div>
 
+                    <!-- Caixa do modal -->
+                    <div class="relative bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+                        <h2 class="text-lg font-semibold text-gray-900">
+                            Excluir sugestão
+                        </h2>
+
+                        <p class="text-sm text-gray-600 mt-2">
+                            Tem certeza que deseja excluir esta sugestão?
+                            <span class="font-medium text-gray-900">
+                                "{{ suggestion.title }}"
+                            </span>
+                        </p>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button onclick="fecharModal('{{ suggestion.id }}')"
+                                    class="px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
+                                Cancelar
+                            </button>
+
+                            <form action="{% url 'deletar_sugestao' suggestion.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition">
+                                    Excluir
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-      </div>
-
-      <!-- Ações -->
-      <div class="relative z-10 flex gap-2" onclick="event.stopPropagation();">
-        <form class="flex items-center" method="POST">
-          <button class="p-1 text-blue-500 hover:scale-110 transition">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-          </button>
-        </form>
-
-        <form class="flex items-center" method="POST">
-          <button class="p-1 text-red-500 hover:scale-110 transition">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
-        </form>
-      </div>
-
-    </div>
   {% endfor %}
 </div>
 
         
     </div>
 </section>
+
+<script>
+function abrirModal(id) {
+    const modal = document.getElementById(`modal-delete-${id}`);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function fecharModal(id) {
+    const modal = document.getElementById(`modal-delete-${id}`);
+    modal.classList.add('hidden');
+}
+</script>
+
+
 
 {% endblock %}
 
