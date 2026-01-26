@@ -180,10 +180,10 @@
                  onclick="event.stopPropagation();">
 
               {% if suggestion.user_voted %}
-                <button class="p-1 text-emerald-600"
+                <button class="p-1 text-emerald-600 [&_path]:fill-current"
                         onclick="event.preventDefault();">
               {% else %}
-                <button class="p-1 hover:text-emerald-600"
+                <button class="p-1 hover:text-emerald-600 [&_path]:fill-none"
                         onclick="event.preventDefault();">
               {% endif %}
                     <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
