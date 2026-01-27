@@ -152,6 +152,10 @@ def index(request):
 def create_suggestion(request):
     """Página para criar uma nova sugestão."""
 
+    if request.user.customer.isStaff:
+        messages.error(request, "Apenas estudantes podem criar sugestões.")
+        return redirect("index")
+
     if request.method == "POST":
         form = SuggestionForm(request.POST)
         if form.is_valid():
@@ -223,27 +227,26 @@ def change_status(request, suggestion_id):
 
     return redirect("one_suggestion", suggestion_id=suggestion_id)
 
+
 @login_required(login_url="auth")
 def deletar_sugestao(request, suggestion_id):
     sugestao = get_object_or_404(Suggestion, id=suggestion_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         sugestao.delete()
-        return redirect('profile')
-    
-@login_required(login_url="auth")   
+        return redirect("profile")
+
+
+@login_required(login_url="auth")
 def editar_sugestao(request, suggestion_id):
     sugestao = get_object_or_404(Suggestion, id=suggestion_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SuggestionForm(request.POST, instance=sugestao)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect("profile")
     else:
         form = SuggestionForm(instance=sugestao)
 
-    return render(request, 'edit.html', {
-        'form': form,
-        'suggestion': sugestao
-    })
+    return render(request, "edit.html", {"form": form, "suggestion": sugestao})
