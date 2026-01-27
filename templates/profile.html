@@ -176,35 +176,34 @@
           <div class="flex gap-4 flex-shrink-0">
 
             <!-- Votos -->
-            <div class="flex items-center gap-1"
-                 onclick="event.stopPropagation();">
+            <div class="flex items-center gap-1">
+              <form action="{% url 'toggle_vote' suggestion.id %}" method="POST" class="flex items-center gap-1" onclick="event.stopPropagation();">
+                {% csrf_token %}
+                {% if suggestion.user_voted %}
+                  <button type="submit" class="p-1 text-emerald-600 [&_path]:fill-current" aria-label="Remover voto">
+                {% else %}
+                  <button type="submit" class="p-1 hover:text-emerald-600 [&_path]:fill-none" aria-label="Votar">
+                {% endif %}
+                      <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
 
-              {% if suggestion.user_voted %}
-                <button class="p-1 text-emerald-600 [&_path]:fill-current"
-                        onclick="event.preventDefault();">
-              {% else %}
-                <button class="p-1 hover:text-emerald-600 [&_path]:fill-none"
-                        onclick="event.preventDefault();">
-              {% endif %}
-                    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12.0001 7.99996C12.9934 7.02663 14.0001 5.85996 14.0001 4.33329C14.0001 3.36083 13.6138 2.4282 12.9261 1.74057C12.2385 1.05293 11.3059 0.666626 10.3334 0.666626C9.16008 0.666626 8.33341 0.999959 7.33341 1.99996C6.33341 0.999959 5.50675 0.666626 4.33341 0.666626C3.36095 0.666626 2.42832 1.05293 1.74069 1.74057C1.05306 2.4282 0.666748 3.36083 0.666748 4.33329C0.666748 5.86663 1.66675 7.03329 2.66675 7.99996L7.33341 12.6666L12.0001 7.99996Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-
-              <span class="text-sm font-medium">
-                {{ suggestion.votes_count|default:0 }}
-              </span>
+                <span class="text-sm font-medium">
+                  {{ suggestion.votes_count|default:0 }}
+                </span>
             </div>
 
             <!-- Comentários -->
             <div class="flex items-center gap-1"
                  onclick="event.stopPropagation();">
-              <button class="p-1 hover:text-emerald-600"
-                      onclick="event.preventDefault();">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-              </button>
+              <a href="{% url 'one_suggestion' suggestion.id %}#comments"
+                 class="p-1 hover:text-emerald-600"
+                 aria-label="Ir para comentários">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.60008 12.0052C5.87247 12.6579 7.33614 12.8347 8.72734 12.5037C10.1185 12.1727 11.3458 11.3558 12.1879 10.2C13.0301 9.04422 13.4317 7.62567 13.3205 6.19997C13.2092 4.77427 12.5925 3.43518 11.5813 2.42399C10.5701 1.41281 9.23101 0.796033 7.80531 0.68481C6.37961 0.573586 4.96106 0.97523 3.80529 1.81736C2.64953 2.6595 1.83254 3.88674 1.50156 5.27794C1.17058 6.66914 1.34738 8.13281 2.00008 9.4052L0.666748 13.3385L4.60008 12.0052Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
               <span class="text-sm font-medium">
                 {{ suggestion.comments_count|default:0 }}
               </span>
