@@ -7,6 +7,11 @@ class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
         fields = ["title", "description", "category"]
+        labels = {
+            "title": "Título da Sugestão",
+            "description": "Descrição da Sugestão",
+            "category": "Categoria",
+        }
         widgets = {
             "title": forms.TextInput(
                 attrs={
