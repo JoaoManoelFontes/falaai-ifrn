@@ -1,86 +1,196 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FalaAI - IFRN</title>
-    <meta name="description" content="Plataforma de IA para o IFRN">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dist/input.css' %}">
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        {% if messages %}
-        <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
-            {% for message in messages %}
-            <div class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
-                        {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-900{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-900{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-900{% else %}bg-slate-50 border-slate-200 text-slate-900{% endif %}"
-                 role="status" data-toast>
-                <div class="mt-0.5">
-                    {% if 'success' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                    {% elif 'error' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                    {% elif 'warning' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                    {% else %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
-                    {% endif %}
-                </div>
-                <div class="flex-1 text-sm leading-5">{{ message }}</div>
-                <button type="button" class="ml-2 text-slate-500 hover:text-slate-700" aria-label="Fechar" data-toast-close>
-                    ✕
-                </button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- Header -->
-        <header class="flex items-center justify-between mb-12">
-            <h1 class="text-4xl font-bold text-gray-800">
-                Fala aí, IFRN
-            </h1>
-            {% if request.user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="inline-flex items-center px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                    Sair
-                </button>
-            </form>
-            {% endif %}
-        </header>
-        <main class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-                    Bem-vindo ao Fala aí
-                </h2>
-        </main>
+{% extends 'base.html' %}
+{% block content %}
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 py-8 border-t border-gray-200">
-            <p class="text-gray-600">
-                © 2024 Fala aí, IFRN. Todos os direitos reservados.
-            </p>
-        </footer>
+
+<!-- HeroSection -->
+
+<section class="">
+      <div class=" relative">
+        <img src="static/images/inovation_and_colaboration.svg" class=" w-full h-full object-cover " alt="Imagem de fundo">
+        <div class="absolute inset-0 z-10 flex flex-col items-center justify-between py-12 text-white text-center bg-gradient-to-r from-[#000000da] to-[#0d7a165e]">
+
+              <img src="static/images/lamp.svg" alt="Ícone de lâmpada">
+              <h1 class="font-bold text-7xl max-w-[760px]">Transforme suas ideias em realidade</h1>
+              <p class="text-2xl max-w-[720px]">A plataforma onde a comunidade acadêmica compartilha, discute e vota nas melhores ideias para inovar nossa instituição</p>
+              <label class="flex gap-2 px-4 py-2 bg-black rounded-lg items-center">Conheça nosso sistema <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-icon lucide-arrow-down animate-bounce"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></label>
+          </div>
     </div>
+</section>
+
+{% comment %} <section>
+      <div class="mb-6">
+        <img src="static/images/Section.svg" class="w-full h-full object-cover" alt="Imagem de fundo">
+    </div>
+</section> {% endcomment %}
+
+
+<section class="py-12 text-center flex flex-col gap-20">
+    <!-- Título -->
+    <div>
+        <h2 class="text-4xl font-bold">
+            Como <span class="text-green-700">Funciona</span>
+        </h2>
+        <p class="text-gray-600 text-lg mt-2">
+            Um processo simples e democrático para transformar ideias em mudanças reais
+        </p>
+    </div>
+    <!-- Cards -->
+    <div class="flex justify-center">
+        <div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <!-- CARD -->
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                    <img src="static/images/Compartilhe sua Ideia.svg" class="h-24 mb-4 mx-auto" alt="">
+                    <h3 class="font-semibold text-lg">Compartilhe sua Ideia</h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Submeta sua proposta de melhoria ou inovação para a comunidade acadêmica avaliada.
+                    </p>
+                </div>
+
+                <!-- CARD -->
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                    <img src="static/images/Discussão Colaborativa.svg" class="h-24 mb-4 mx-auto" alt="">
+                    <h3 class="font-semibold text-lg">Discussão Colaborativa</h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        A comunidade debate, oferece sugestões e melhorias coletivamente nas propostas.
+                    </p>
+                </div>
+
+                <!-- CARD -->
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                    <img src="static/images/Votação Democrática.svg" class="h-24 mb-4 mx-auto" alt="">
+                    <h3 class="font-semibold text-lg">Votação Democrática</h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Todos podem votar nas melhores ideias, priorizando as mais impactantes.
+                    </p>
+                </div>
+
+                <!-- CARD -->
+                <div
+                    class="bg-green-50 p-6 rounded-lg shadow-sm flex flex-col items-center text-center w-64 min-h-full">
+                    <img src="static/images/Implementação.svg" class="h-24 mb-4 mx-auto" alt="">
+                    <h3 class="font-semibold text-lg">Implementação</h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        As ideias mais votadas são comprovadas para implementação pela instituição.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-4 items-center bg-white p-8 shadow rounded-xl max-w-lg mx-auto">
+        <p class="text-3xl font-semibold">Pronto para Inovar?</p>
+        <button
+            class=" bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:cursor-pointer transition max-w-72">
+            <a class="flex items-center justify-center gap-2" href="{% url 'create_suggestion' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Compartilhar ideia
+            </a>
+        </button>
+        <p class=" text-gray-600 text-sm">Junte-se à comunidade inovadora e ajude a transformar nossa instituição
+        </p>
+    </div>
+</section>
+
+
+<!-- Ideias da Comunidade -->
+<section id="sugestoes" class="py-12 bg-gray-50">
+    <div class="mx-10 px-6">
+        <h2 class="text-3xl font-bold">Ideias da <span class="text-green-600">Comunidade</span></h2>
+        <p class="text-gray-600 mb-6">Descubra, vote e participe das melhores propostas</p>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            {% for value, label in ordenation_types %}
+              <a
+                href="?ordenation={{ value }}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}#sugestoes"
+                class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium border transition
+                       {% if ordenation_type == value %}
+                         bg-green-600 text-zinc-50
+                       {% else %}
+                         text-neutral-950 bg-white border-slate-200 hover:bg-gray-200
+                       {% endif %}"
+              >
+                {% if value == 'featured' %}
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.66659 9.66667C6.10861 9.66667 6.53254 9.49107 6.8451 9.17851C7.15766 8.86595 7.33325 8.44203 7.33325 8C7.33325 7.08 6.99992 6.66667 6.66659 6C5.95192 4.57133 6.51725 3.29733 7.99992 2C8.33325 3.66667 9.33325 5.26667 10.6666 6.33333C11.9999 7.4 12.6666 8.66667 12.6666 10C12.6666 10.6128 12.5459 11.2197 12.3114 11.7859C12.0768 12.352 11.7331 12.8665 11.2998 13.2998C10.8664 13.7332 10.352 14.0769 9.78578 14.3114C9.21959 14.546 8.61275 14.6667 7.99992 14.6667C7.38708 14.6667 6.78025 14.546 6.21406 14.3114C5.64788 14.0769 5.13343 13.7332 4.70009 13.2998C4.26675 12.8665 3.923 12.352 3.68848 11.7859C3.45396 11.2197 3.33325 10.6128 3.33325 10C3.33325 9.23133 3.62192 8.47067 3.99992 8C3.99992 8.44203 4.17551 8.86595 4.48807 9.17851C4.80063 9.49107 5.22456 9.66667 5.66659 9.66667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>            
+                {% elif value == 'most_voted' %}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.6666 4.66663L8.99992 10.3333L5.66659 6.99996L1.33325 11.3333" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10.6667 4.66663H14.6667V8.66663" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                {% elif value == 'default' %}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.99992 14.6667C11.6818 14.6667 14.6666 11.6819 14.6666 8.00004C14.6666 4.31814 11.6818 1.33337 7.99992 1.33337C4.31802 1.33337 1.33325 4.31814 1.33325 8.00004C1.33325 11.6819 4.31802 14.6667 7.99992 14.6667Z" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 4V8L10.6667 9.33333" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>                  
+                {% endif %}
+                {{ label }}
+              </a>
+            {% endfor %}
+          </div>
+          <div class="flex items-center gap-3">
+            <select
+              onchange="updateFilters('category', this.value)"
+              class="border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option value="">Todas as categorias</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
+                  {{ cat.name }}
+                </option>
+              {% endfor %}
+            </select>
+        
+            <select
+              onchange="updateFilters('status', this.value)"
+              class="border border-gray-300 rounded-full px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option value="">Todos os status</option>
+              {% for value, label in status_types %}
+                <option value="{{ value }}" {% if status == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        
+        <script>
+          function updateFilters(filterType, value) {
+            const params = new URLSearchParams(window.location.search);
+            if (value === '') params.delete(filterType);
+            else params.set(filterType, value);
+            window.location.href = window.location.pathname + '?' + params.toString() + '#sugestoes';
+          }
+          
+          // Scroll para a seção de sugestões se houver hash na URL
+          if (window.location.hash === '#sugestoes') {
+            document.addEventListener('DOMContentLoaded', function() {
+              const section = document.getElementById('sugestoes');
+              if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            });
+          }
+        </script>
+        
+        <!-- Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {% for suggestion in suggestions %}
+            {% include 'snippets/suggestion_card.html' with suggestion=suggestion %}
+          {% empty %}
+            <p class="text-gray-600">Nenhuma sugestão encontrada.</p>
+          {% endfor %}
+        </div>
+        
+</section>
+
+
+
 </body>
-<script>
-    (function () {
-        const toasts = document.querySelectorAll('[data-toast]');
-        toasts.forEach((toast) => {
-            const timer = setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-x-2', 'transition');
-                setTimeout(() => toast.remove(), 200);
-            }, 4000);
-            const btn = toast.querySelector('[data-toast-close]');
-            if (btn) {
-                btn.addEventListener('click', () => {
-                    clearTimeout(timer);
-                    toast.classList.add('opacity-0', 'translate-x-2', 'transition');
-                    setTimeout(() => toast.remove(), 150);
-                });
-            }
-        });
-    })();
-</script>
+
 </html>
+
+{% endblock %}

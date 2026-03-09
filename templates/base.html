@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FalaAI - IFRN</title>
+    <meta name="description" content="Plataforma de IA para o IFRN">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dist/input.css' %}">
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    {% if messages %}
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
+        {% for message in messages %}
+        <div class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
+                        {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-900{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-900{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-900{% else %}bg-slate-50 border-slate-200 text-slate-900{% endif %}"
+            role="status" data-toast>
+            <div class="mt-0.5">
+                {% if 'success' in message.tags %}
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                {% elif 'error' in message.tags %}
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                {% elif 'warning' in message.tags %}
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                {% else %}
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                {% endif %}
+            </div>
+            <div class="flex-1 text-sm leading-5">{{ message }}</div>
+            <button type="button" class="ml-2 text-slate-500 hover:text-slate-700" aria-label="Fechar" data-toast-close>
+                ✕
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Header -->
+    <header>
+        <nav class="flex justify-between items-center w-full border-b-2 border-gray-300 px-12 py-4">
+            <div>
+                <a href="{% url 'index' %}" class="text-3xl font-bold">Fala Aí, <span
+                        class="text-green-700">IFRN</span></a>
+            </div>
+
+            <div class="relative w-full max-w-sm">
+                <!-- TODO: adicionar method e action no form -->
+                <form>
+                    <input type="text" placeholder="Buscar ideias e projetos..."
+                        class="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 outline-none focus:border-green-500 transition">
+                    <!-- TODO: type submit no botão -->
+                    <button class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                {% if request.user.is_authenticated %}
+                <div class="relative">
+                    <!-- Botão que aciona o dropdown -->
+                    <button id="dropdownButton" class="font-semibold rounded hover:underline">
+                        Olá, {{ user.first_name }}
+                    </button>
+
+                    <!-- Menu do Dropdown (inicialmente oculto com a classe 'hidden') -->
+                    <div id="dropdownMenu"
+                        class="absolute z-20 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
+                        <a href="{% url 'profile' %}"
+                            class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg> Perfil</a>
+                        <a href="{% url 'create_suggestion' %}"
+                            class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                                <path d="M5 12h14" />
+                                <path d="M12 5v14" />
+                            </svg> Nova ideia</a>
+                        <a href="{% url 'logout' %}"
+                            class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-red-100"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out">
+                                <path d="m16 17 5-5-5-5" />
+                                <path d="M21 12H9" />
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            </svg> Sair</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'auth' %}"
+                class="flex gap-2 font-semibold border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                </svg>
+                Entrar
+            </a>
+            {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-1">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center border-t border-gray-200 bg-[#171717]">
+        <div class="flex justify-between p-12">
+            <div class="flex flex-col items-start justify-between">
+                <p class="text-white text-start w-[720px]">
+                    Plataforma de inovação aberta que conecta mentes criativas da comunidade acadêmica
+                    para transformar ideias em soluções reais.
+                </p>
+                <a href="https://github.com/JoaoManoelFontes/falaai-ifrn" target="_blank"
+                    class="inline-block bg-green-800 hover:bg-green-700 transition rounded-md p-2">
+                    <svg class="w-5 h-5 fill-white stroke-none" role="img" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <title>GitHub</title>
+                        <path
+                            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg>
+                </a>
+
+            </div>
+
+            <div class="flex gap-12 text-white">
+                <!-- TODO: adicionar links reais -->
+                <div class="flex flex-col text-start gap-2">
+                    <strong>Plataforma</strong>
+                    <a href="#" class="text-[#D1D5DB] hover:underline hover:decoration-green-600">Como funciona</a>
+                    <a href="#" class="text-[#D1D5DB] hover:underline hover:decoration-green-600">Sobre</a>
+                </div>
+
+                <!-- TODO: adicionar links reais -->
+                <div class="flex flex-col text-start gap-2">
+                    <strong>Mapa do Site</strong>
+                    <a href="#" class="text-[#D1D5DB] hover:underline hover:decoration-green-600">Página inicial</a>
+                    <a href="#" class="text-[#D1D5DB] hover:underline hover:decoration-green-600">Compartilhar ideia</a>
+                    <a href="#" class="text-[#D1D5DB] hover:underline hover:decoration-green-600">Minhas sugestões</a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full h-[1px] bg-gray-500"></div>
+
+        <div class="flex py-6 justify-center items-center text-white">
+            <p>&copy; 2025 - Fala Aí, IFRN. Desenvolvido por
+                <a target="_blank" href="https://github.com/genzo-dev"
+                    class="text-gray-400 hover:underline hover:decoration-green-600">Gabriel Enzo</a>,
+                <a target="_blank" href="https://github.com/JoaoManoelFontes"
+                    class="text-gray-400 hover:underline hover:decoration-green-600">João Manoel</a>,
+                <a target="_blank" href="https://github.com/BrunoPereiradeSouza"
+                    class="text-gray-400 hover:underline hover:decoration-green-600">Bruno Pereira</a> &
+                <a target="_blank" href="https://github.com/alvesrangellws"
+                    class="text-gray-400 hover:underline hover:decoration-green-600">Rangel Alves</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+<script>
+    (function () {
+        const toasts = document.querySelectorAll('[data-toast]');
+        toasts.forEach((toast) => {
+            const timer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-2', 'transition');
+                setTimeout(() => toast.remove(), 200);
+            }, 4000);
+            const btn = toast.querySelector('[data-toast-close]');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    clearTimeout(timer);
+                    toast.classList.add('opacity-0', 'translate-x-2', 'transition');
+                    setTimeout(() => toast.remove(), 150);
+                });
+            }
+        });
+    })();
+
+    const dropdownButton = document.getElementById('dropdownButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+
+    dropdownButton.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (event) => {
+        const isClickInside = dropdownButton.contains(event.target) || dropdownMenu.contains(event.target);
+        if (!isClickInside) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
+</script>
+
+</html>

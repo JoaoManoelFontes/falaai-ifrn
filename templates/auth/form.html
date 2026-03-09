@@ -1,99 +1,80 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'dist/input.css' %}">
-</head>
-<body class="min-h-screen flex items-center justify-center bg-gray-50">
-  <main class="w-full max-w-sm bg-white shadow-md rounded-md p-6">
-    {% if messages %}
-        <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
-            {% for message in messages %}
-            <div class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3">
+  {% for message in messages %}
+  <div
+    class="flex items-start gap-3 rounded-lg shadow-lg border px-4 py-3 max-w-sm
                         {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-900{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-900{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-900{% else %}bg-slate-50 border-slate-200 text-slate-900{% endif %}"
-                 role="status" data-toast>
-                <div class="mt-0.5">
-                    {% if 'success' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                    {% elif 'error' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                    {% elif 'warning' in message.tags %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-                    {% else %}
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
-                    {% endif %}
-                </div>
-                <div class="flex-1 text-sm leading-5">{{ message }}</div>
-                <button type="button" class="ml-2 text-slate-500 hover:text-slate-700" aria-label="Fechar" data-toast-close>
-                    ✕
-                </button>
-            </div>
-            {% endfor %}
+    role="status" data-toast>
+    <div class="mt-0.5">
+      {% if 'success' in message.tags %}
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      {% elif 'error' in message.tags %}
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
+      {% elif 'warning' in message.tags %}
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+      {% else %}
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+      {% endif %}
+    </div>
+    <div class="flex-1 text-sm leading-5">{{ message }}</div>
+    <button type="button" class="ml-2 text-slate-500 hover:text-slate-700" aria-label="Fechar" data-toast-close>
+      ✕
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="flex justify-between h-full min-h-screen">
+    <div class="flex items-center justify-center  font-sans font-bold w-4/5">
+      <span class="text-7xl font-bold">
+        Fala Aí, <span class="text-green-700">IFRN</span>
+      </span>
+    </div>
+
+    <div class="bg-[#96D4AC] w-3/5 h-full min-h-screen ">
+      <div class="flex flex-col justify-center items-center h-full min-h-screen gap-6">
+
+        <div class="flex items-center mb-4 gap-3">
+          <div class="flex items-center justify-center w-10 h-10  rounded-full">
+            <svg class="w-10 h-10 text-gray-950" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+            </svg>
+          </div>
+
+          <span class="text-3xl font-bold">Login com o Suap</span>
         </div>
-        {% endif %}
-        
-    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Entrar</h1>
 
-    <form method="post" action="">
-      {% csrf_token %}
+        <div class="w-3/4">
+          <label for="id_matricula" class="block text-sm font-medium text-gray-700">Matrícula</label>
+          <input type="text" id="id_matricula" name="matricula" required autocomplete="username"
+            class="mt-1 w-full py-3 rounded-md p-3 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            placeholder="Digite sua matrícula">
+        </div>
 
-      <div class="mb-4">
-        <label for="id_matricula" class="block text-sm font-medium text-gray-700">Matrícula</label>
-        <input
-          type="text"
-          id="id_matricula"
-          name="matricula"
-          required
-          autocomplete="username"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          placeholder="Digite sua matrícula"
-        />
+        <div class="w-3/4">
+          <label for="id_senha" class="block text-sm font-medium text-gray-700">Senha</label>
+          <input type="password" id="id_senha" name="senha" required autocomplete="current-password"
+            class="mt-1 w-full py-3  p-3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            placeholder="Digite sua senha">
+        </div>
+
+        <button type="submit"
+          class="w-3/4 inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-teal-800 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          Entrar
+        </button>
+
       </div>
 
-      <div class="mb-6">
-        <label for="id_senha" class="block text-sm font-medium text-gray-700">Senha</label>
-        <input
-          type="password"
-          id="id_senha"
-          name="senha"
-          required
-          autocomplete="current-password"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          placeholder="Digite sua senha"
-        />
-      </div>
+    </div>
+</form>
 
-      <button
-        type="submit"
-        class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      >
-        Entrar
-      </button>
-    </form>
-  </main>
-</body>
-
-<script>
-  (function () {
-      const toasts = document.querySelectorAll('[data-toast]');
-      toasts.forEach((toast) => {
-          const timer = setTimeout(() => {
-              toast.classList.add('opacity-0', 'translate-x-2', 'transition');
-              setTimeout(() => toast.remove(), 200);
-          }, 4000);
-          const btn = toast.querySelector('[data-toast-close]');
-          if (btn) {
-              btn.addEventListener('click', () => {
-                  clearTimeout(timer);
-                  toast.classList.add('opacity-0', 'translate-x-2', 'transition');
-                  setTimeout(() => toast.remove(), 150);
-              });
-          }
-      });
-  })();
-</script>
-
-</html>
+{% endblock %}
